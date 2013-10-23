@@ -11,12 +11,40 @@ class Installer extends LibraryInstaller
      * Package types
      * @var array
      */
-    private $supportedTypes = array(
-		'app'       => 'public_html/',
-		'module'    => 'protected/modules/{name}/',
-		'extension' => 'protected/extensions/{name}/',
-		'widget'    => 'protected/widgets/{name}/'
-    );
+    private $supportedTypes = array('app', 'module', 'extension', 'framework');
+
+    protected function yiiProtectedPath(){
+        if ($this->composer->getPackage()) {
+            $extra = $this->composer->getPackage()->getExtra();
+            if (!empty($extra['yiicomposer']['protected'])){
+                return $extra['yiicomposer']['protected'];
+            }
+        }
+
+        return 'protected/';
+    }
+
+    protected function yiiFrameworkPath(){
+        if ($this->composer->getPackage()) {
+            $extra = $this->composer->getPackage()->getExtra();
+            if (!empty($extra['yiicomposer']['framework'])){
+                return $extra['yiicomposer']['framework'];
+            }
+        }
+
+        return 'framework/';
+    }
+
+    protected function yiiTypePath($type, $name=""){
+        switch($type){
+            case 'framework': return $this->yiiFrameworkPath(); break;
+            case 'app': return $this->yiiProtectedPath().str_replace('-','/',$name)."/"; break;
+            case 'module': return $this->yiiProtectedPath().'modules/'.$name."/"; break;
+            case 'extension': return $this->yiiProtectedPath().'extensions/'.$name."/"; break;
+        }
+
+        return $this->yiiProtectedPath().'vendor/'.$name."/";
+    }
 
     /**
      * {@inheritDoc}
@@ -27,6 +55,10 @@ class Installer extends LibraryInstaller
 
         $type = strtolower($type);
 
+        if($type == 'yii-framework'){
+            return $this->yiiTypePath('framework');
+        }
+
         $subtype = 'none';
 
         if(preg_match('#yii-([^-]*)-(.*)#i', $type, $m)){
@@ -34,30 +66,13 @@ class Installer extends LibraryInstaller
             $name = $m[2];
         }
 
-        if(!isset($this->supportedTypes[$subtype])){
+        if(!in_array($subtype, $this->supportedTypes)){
             throw new \InvalidArgumentException(
                 'Sorry the package type of this package is not yet supported.'
             );
         }
 
-
-
-        if ($this->composer->getPackage()) {
-            $extra = $this->composer->getPackage()->getExtra();
-            if (!empty($extra['yiicomposer'])){
-                if(isset($extra['yiicomposer'][$subtype])){
-					return str_replace('{name}', $name, $extra['yiicomposer'][$subtype]);
-                }
-            }
-        }
-
-        if(isset($this->supportedTypes[$subtype])){
-        	return str_replace('{name}', $name, $this->supportedTypes[$subtype]);
-        }else{
-        	throw new \InvalidArgumentException(
-                'Sorry the package type of this package is not yet supported.'
-            );
-        }
+        return $this->yiiTypePath($subtype, $name);
     }
 
     public function uninstall(InstalledRepositoryInterface $repo, PackageInterface $package)
@@ -81,11 +96,15 @@ class Installer extends LibraryInstaller
 
         $subtype = 'none';
 
+        if($packageType == 'yii-framework'){
+            return true;
+        }
+
         if(preg_match('#yii-([^-]*)-(.*)#i', $packageType, $m)){
             $subtype = $m[1];
         }
 
-		if(!isset($this->supportedTypes[$subtype])){
+        if(!in_array($subtype, $this->supportedTypes)){
 			return false;
 		}
 
