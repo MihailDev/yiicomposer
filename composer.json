@@ -23,7 +23,8 @@
     },
     "support": {
         "email": "mihail.kucher@gmail.com",
-        "source": "http://github.com/mihaildev/yiicomposer"
+        "source": "http://github.com/mihaildev/yiicomposer",
+        "issues": "https://github.com/yiisoft/yii/issues?state=open"
     },
     "require": {
         "php": ">=5.3.0"
