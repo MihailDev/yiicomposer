@@ -6,6 +6,7 @@ use Composer\IO\IOInterface;
 use Composer\Repository\InstalledRepositoryInterface;
 use Composer\Package\PackageInterface;
 use Composer\Util\Filesystem;
+use Composer\Installer\LibraryInstaller;
 
 class Installer extends LibraryInstaller
 {
