@@ -8,8 +8,7 @@ use Composer\Repository\InstalledRepositoryInterface;
 class Installer extends LibraryInstaller
 {
     /**
-     * Package types to installer class map
-     *
+     * Package types
      * @var array
      */
     private $supportedTypes = array(
