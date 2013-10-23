@@ -43,7 +43,7 @@ class Installer extends LibraryInstaller
             case 'extension': return $this->yiiProtectedPath().'extensions/'.$name."/"; break;
         }
 
-        return $this->yiiProtectedPath().'vendor/'.$name."/";
+        return $this->yiiProtectedPath().'vendor/'.$type."/".$name."/";
     }
 
     /**
