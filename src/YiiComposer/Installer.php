@@ -10,11 +10,6 @@ use Composer\Installer\LibraryInstaller;
 
 class Installer extends LibraryInstaller
 {
-    /**
-     * Package types
-     * @var array
-     */
-
     protected $yiiProtected = 'protected';
     protected $yiiFramework = 'framework';
     protected $yiiFrameworkName = 'yiisoft/yii';
