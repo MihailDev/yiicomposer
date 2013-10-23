@@ -1,0 +1,30 @@
+{
+    "name": "mihaildev/yiicomposer",
+    "type": "composer-installer",
+    "description": "Yii Composer installer",
+    "homepage": "http://github.com/mihaildev/yiicomposer",
+    "keywords": [
+        "installer", "yii"
+    ],
+    "authors": [
+        {
+            "name": "Mihail",
+            "email": "mihail.kucher@gmail.com",
+            "homepage": "http://set4web.ru",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-0": { "YiiComposer\\": "src/" }
+    },
+    "extra": {
+        "class": "YiiComposer\\Installer"
+    },
+    "support": {
+        "email": "mihail.kucher@gmail.com",
+        "source": "http://github.com/mihaildev/yiicomposer"
+    },
+    "require": {
+        "php": ">=5.3.0"
+    }
+}
