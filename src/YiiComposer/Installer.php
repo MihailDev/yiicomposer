@@ -14,7 +14,7 @@ class Installer extends LibraryInstaller
      * Package types
      * @var array
      */
-    protected $supportedTypes = array('framework', 'module', 'extension', 'other');
+
     protected $yiiProtected = 'protected';
     protected $yiiFramework = 'framework';
     protected $yiiFrameworkName = 'yiisoft/yii';
@@ -50,17 +50,10 @@ class Installer extends LibraryInstaller
             return array('type' => 'framework', 'name' => '');
         }
 
-        $subtype = 'none';
-
         if(preg_match('#yii-([^-]*)-(.*)#i', $type, $m)){
-            $subtype = $m[1];
-            $name = $m[2];
-        }
-
-        if(!in_array($subtype, $this->supportedTypes)){
             if($bool)
                 return true;
-            return array('type' => $subtype, 'name' => $name);
+            return array('type' => $m[1], 'name' => $m[2]);
         }
 
         return false;
