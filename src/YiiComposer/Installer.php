@@ -81,6 +81,9 @@ class Installer extends LibraryInstaller
         return $this->yiiTypePath($info['type'], $info['name']);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function uninstall(InstalledRepositoryInterface $repo, PackageInterface $package)
     {
         if($package->getName() == $this->yiiFrameworkName){
