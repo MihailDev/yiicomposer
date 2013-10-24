@@ -24,7 +24,7 @@ class Installer extends LibraryInstaller
     public function __construct(IOInterface $io, Composer $composer, $type = 'library', Filesystem $filesystem = null){
         $this->yiiTypes = array(
             'module' => '{vendor}'.DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR.'{name}',
-            'extension' => '{vendor}'.DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR.'{name}',
+            'extension' => '{vendor}'.DIRECTORY_SEPARATOR.'extensions'.DIRECTORY_SEPARATOR.'{name}',
             'framework' => '{vendor}'.DIRECTORY_SEPARATOR.'framework'
         );
 
