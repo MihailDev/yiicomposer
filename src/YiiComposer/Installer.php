@@ -31,12 +31,12 @@ class Installer extends LibraryInstaller
         if ($composer->getPackage()) {
             $extra = $composer->getPackage()->getExtra();
 
-            if(isset($extra['yiicomposer'])){
-                if(isset($extra['yiicomposer']['framework-name'])){
-                    $this->yiiFrameworkName = $extra['yiicomposer']['framework-name'];
+            if(!empty($extra['yiicomposer'])){
+                if(!empty($extra['yiicomposer']['framework-name'])){
+                    $this->yiiFrameworkName = strtolower(trim($extra['yiicomposer']['framework-name']));
                 }
 
-                if(isset($extra['yiicomposer']['paths'])){
+                if(!empty($extra['yiicomposer']['paths'])){
                     foreach($extra['yiicomposer']['paths'] as $type => $path){
                         $type = strtolower($type);
                         $this->yiiTypes[$type] = str_replace('/', DIRECTORY_SEPARATOR, $path);
