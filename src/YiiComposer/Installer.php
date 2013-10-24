@@ -31,15 +31,15 @@ class Installer extends LibraryInstaller
         if ($composer->getPackage()) {
             $extra = $composer->getPackage()->getExtra();
 
-            if(isset($extra['yiicomposer-path']) && is_array($extra['yiicomposer-path'])){
-                foreach($extra['yiicomposer-path'] as $type => $path){
-                    $type = strtolower($type);
-                    $this->yiiTypes[$type] = $path;
-                }
-            }
-
             if(isset($extra['yiicomposer-framework-name'])){
                 $this->yiiFrameworkName = $extra['yiicomposer-framework-name'];
+            }
+
+            if(isset($extra['yiicomposer-path'])){
+                foreach($extra['yiicomposer-path'] as $type => $path){
+                    $type = strtolower($type);
+                    $this->yiiTypes[$type] = str_replace('/', DIRECTORY_SEPARATOR, $path);
+                }
             }
         }
 
@@ -75,7 +75,7 @@ class Installer extends LibraryInstaller
         }
         $info = array("{vendor}" => $this->vendorDir, "{type}" => $type, "{name}" => $name);
         $path = strtr($path, $info);
-        return rtrim($path, '/\\').DIRECTORY_SEPARATOR;
+        return rtrim($path, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
     }
 
     /**
