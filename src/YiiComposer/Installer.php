@@ -31,15 +31,18 @@ class Installer extends LibraryInstaller
         if ($composer->getPackage()) {
             $extra = $composer->getPackage()->getExtra();
 
-            if(isset($extra['yiicomposer-framework-name'])){
-                $this->yiiFrameworkName = $extra['yiicomposer-framework-name'];
-            }
-
-            if(isset($extra['yiicomposer-path'])){
-                foreach($extra['yiicomposer-path'] as $type => $path){
-                    $type = strtolower($type);
-                    $this->yiiTypes[$type] = str_replace('/', DIRECTORY_SEPARATOR, $path);
+            if(isset($extra['yiicomposer'])){
+                if(isset($extra['yiicomposer']['framework-name'])){
+                    $this->yiiFrameworkName = $extra['yiicomposer']['framework-name'];
                 }
+
+                if(isset($extra['yiicomposer']['paths'])){
+                    foreach($extra['yiicomposer']['paths'] as $type => $path){
+                        $type = strtolower($type);
+                        $this->yiiTypes[$type] = str_replace('/', DIRECTORY_SEPARATOR, $path);
+                    }
+                }
+
             }
         }
 
