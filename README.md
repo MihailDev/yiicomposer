@@ -9,7 +9,7 @@ Yii Composer Installer
 
     {
       "require": {
-          "mihaildev/yiicomposer": "dev-master",
+          "mihaildev/yiicomposer": "2.0.0",
           "mihaildev/testextension": "dev-master",
           "mihaildev/testmodule": "dev-master",
           "yiisoft/yii": "1.1.14"
@@ -31,7 +31,7 @@ Yii Composer Installer
         "type": "yii-module-test",
         "version": "1.0.0",
         "require": {
-            "mihaildev/yiicomposer": "dev-master"
+            "mihaildev/yiicomposer": "2.0.0"
         }
     }
 
@@ -42,7 +42,7 @@ Yii Composer Installer
         "type": "yii-extension-test",
         "version": "1.0.0",
         "require": {
-            "mihaildev/yiicomposer": "dev-master"
+            "mihaildev/yiicomposer": "2.0.0"
         }
     }
 

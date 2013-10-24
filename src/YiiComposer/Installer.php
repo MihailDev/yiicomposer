@@ -8,27 +8,38 @@ use Composer\Package\PackageInterface;
 use Composer\Util\Filesystem;
 use Composer\Installer\LibraryInstaller;
 
+
+/*
+ * задачи:
+ * 2 все плюшки вынести в venodor и добавить алиасы
+ * 3 запустить миграции
+ * */
+
 class Installer extends LibraryInstaller
 {
-    protected $yiiProtected = 'protected';
-    protected $yiiFramework = 'framework';
     protected $yiiFrameworkName = 'yiisoft/yii';
+    protected $yiiTypes = array();
 
 
-    public function __construct(IOInterface $io, Composer $composer, $type = 'library', Filesystem $filesystem = null)
-    {
+    public function __construct(IOInterface $io, Composer $composer, $type = 'library', Filesystem $filesystem = null){
+        $this->yiiTypes = array(
+            'module' => '{vendor}'.DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR.'{name}',
+            'extension' => '{vendor}'.DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR.'{name}',
+            'framework' => '{vendor}'.DIRECTORY_SEPARATOR.'framework'
+        );
+
         if ($composer->getPackage()) {
             $extra = $composer->getPackage()->getExtra();
-            if(isset($extra['yii-protected'])){
-                $this->yiiProtected = rtrim($extra['yii-protected'], '/\\');
+
+            if(isset($extra['yiicomposer-path']) && is_array($extra['yiicomposer-path'])){
+                foreach($extra['yiicomposer-path'] as $type => $path){
+                    $type = strtolower($type);
+                    $this->yiiTypes[$type] = $path;
+                }
             }
 
-            if(isset($extra['yii-framework'])){
-                $this->yiiFramework = rtrim($extra['yii-framework'], '/\\');
-            }
-
-            if(isset($extra['yii-framework-name'])){
-                $this->yiiFrameworkName = $extra['yii-framework-name'];
+            if(isset($extra['yiicomposer-framework-name'])){
+                $this->yiiFrameworkName = $extra['yiicomposer-framework-name'];
             }
         }
 
@@ -54,15 +65,17 @@ class Installer extends LibraryInstaller
         return false;
     }
 
-     protected function yiiTypePath($type, $name=""){
-        switch($type){
-            case 'framework': return  $this->yiiFramework.DIRECTORY_SEPARATOR; break;
-            case 'module': return $this->yiiProtected.DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR.$name.DIRECTORY_SEPARATOR; break;
-            case 'extension': return $this->yiiProtected.DIRECTORY_SEPARATOR.'extensions'.DIRECTORY_SEPARATOR.$name.DIRECTORY_SEPARATOR; break;
-            case 'other': return $this->yiiProtected.DIRECTORY_SEPARATOR.str_replace('-',DIRECTORY_SEPARATOR,$name).DIRECTORY_SEPARATOR; break;
-        }
+    protected function yiiTypePath($type, $name=""){
 
-        return $this->yiiProtected.DIRECTORY_SEPARATOR.$type.DIRECTORY_SEPARATOR.$name.DIRECTORY_SEPARATOR;
+        $this->initializeVendorDir();
+
+        $path = "{vendor}".DIRECTORY_SEPARATOR."{type}".DIRECTORY_SEPARATOR."{name}";
+        if(isset($this->yiiTypes[$type])){
+            $path = $this->yiiTypes[$type];
+        }
+        $info = array("{vendor}" => $this->vendorDir, "{type}" => $type, "{name}" => $name);
+        $path = strtr($path, $info);
+        return rtrim($path, '/\\').DIRECTORY_SEPARATOR;
     }
 
     /**
