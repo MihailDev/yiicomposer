@@ -103,10 +103,12 @@ class Installer extends LibraryInstaller
     /**
      * {@inheritDoc}
      */
-    public function getInstallPath(PackageInterface $package)
+    public function supports($packageType)
     {
-        $targetDir = $package->getTargetDir();
+        if(preg_match('#yii-[^-]*-.*#i', $type)){
+            return true;
+        }
 
-        return $this->getPackageBasePath($package) . ($targetDir ? '/'.$targetDir : '');
+        return parent::supports($packageType);
     }
 }
