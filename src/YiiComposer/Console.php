@@ -31,6 +31,40 @@ class Console{
         return self::getVendorDir($composer).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR."config".DIRECTORY_SEPARATOR."console.php";
     }
 
+    public static function getConsoleCommands(Composer $composer){
+        $commands = array(
+            array('yiic', 'migrate')
+        );
+        if ($composer->getPackage()) {
+            $extra = $composer->getPackage()->getExtra();
+            if(!empty($extra['yiicomposer-console-commands'])){
+                $tmp = $extra['yiicomposer-console-commands'];
+            }
+
+            if(!empty($tmp)){
+                $commands = array();
+                foreach($tmp as $c){
+                    $command = array();
+
+                    $command[] = 'yiic';
+                    $command[] = $c['controller'];
+
+                    if(!empty($c['action'])){
+                        $command[] = $c['action'];
+                    }
+
+                    if(!empty($c['action'])){
+                        $command = array_merge($command,  $c['params']);
+                    }
+
+                    $commands[] = $command;
+                }
+            }
+        }
+
+        return $commands;
+    }
+
     public static function update(Event $event)
     {
         defined('YII_PATH') or self::defineYiiPath($event);
@@ -38,8 +72,12 @@ class Console{
 
         $app = self::yii();
 
-        $app->commandRunner->addCommands(\Yii::getPathOfAlias('system.cli.commands'));
-        $app->commandRunner->run(array('yiic', 'migrate'));
+        $commands = self::getConsoleCommands($event->getComposer());
+
+        foreach($commands as $command){
+            $app->commandRunner->addCommands(\Yii::getPathOfAlias('system.cli.commands'));
+            $app->commandRunner->run($command);
+        }
 
         echo "\n";
     }
