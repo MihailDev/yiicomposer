@@ -42,10 +42,6 @@ class Installer extends LibraryInstaller
     protected function yiiPackageInfo($type){
         $type = strtolower($type);
 
-        if($type == 'yii-framework'){
-            return array('type' => 'framework', 'name' => '');
-        }
-
         if(preg_match('#yii-([^-]*)-(.*)#i', $type, $m)){
             return array('type' => $m[1], 'name' => $m[2]);
         }
@@ -105,7 +101,7 @@ class Installer extends LibraryInstaller
      */
     public function supports($packageType)
     {
-        if(preg_match('#yii-[^-]*-.*#i', $packageType)){
+        if($this->yiiPackageInfo($packageType) !== false){
             return true;
         }
 
