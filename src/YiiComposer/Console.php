@@ -37,6 +37,10 @@ class Console{
         defined('CONSOLE_CONFIG') or self::defineConfigFile($event);
 
         $app = self::yii();
+        echo "YiiPath: ".YII_PATH."\n";
+        echo "ConfigPath: ".CONSOLE_CONFIG."\n";
+
+
         if($app !== null){
             $app->commandRunner->addCommands(\Yii::getPathOfAlias('system.cli.commands'));
             $app->commandRunner->run(array('yiic', 'migrate'));
