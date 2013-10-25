@@ -43,7 +43,7 @@ class Installer extends LibraryInstaller
     public static function yiiPackageInfo($type){
         $type = strtolower($type);
 
-        if(preg_match('#yii-([^-]*)-(.*)#i', $type, $m)){
+        if(preg_match('#yii-([^-]+)-(.+)#i', $type, $m)){
             return array('type' => $m[1], 'name' => $m[2]);
         }
 

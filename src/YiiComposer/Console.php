@@ -57,6 +57,12 @@ class Console{
                         $command = array_merge($command,  $c['params']);
                     }
 
+                    if(!empty($c['params'])){
+                        foreach($c['params'] as $k=>$v){
+                            $command[] = '--'.$k.'='.$v;
+                        }
+                    }
+
                     $commands[] = $command;
                 }
             }
@@ -77,6 +83,7 @@ class Console{
         foreach($commands as $command){
             $app->commandRunner->addCommands(\Yii::getPathOfAlias('system.cli.commands'));
             $app->commandRunner->run($command);
+            echo "\n";
         }
 
         echo "\n";
