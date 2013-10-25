@@ -12,7 +12,7 @@ use YiiComposer\Installer;
 class Console{
     public static function getYiiPath(Event $event){
         $paths = Installer::getYiiPaths($event->getComposer());
-        return Installer::getYiiPackageBasePath('framework', self::getVendorDir($event->getComposer()), $paths).DIRECTORY_SEPARATOR."framework";
+        return Installer::getYiiPackageBasePath('framework', self::getVendorDir($event->getComposer()), $paths, 'framework').DIRECTORY_SEPARATOR."framework";
     }
 
     public static function getVendorDir(Composer $composer){
