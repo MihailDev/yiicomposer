@@ -105,7 +105,7 @@ class Installer extends LibraryInstaller
      */
     public function supports($packageType)
     {
-        if(preg_match('#yii-[^-]*-.*#i', $type)){
+        if(preg_match('#yii-[^-]*-.*#i', $packageType)){
             return true;
         }
 
