@@ -37,9 +37,10 @@ class Console{
         defined('CONSOLE_CONFIG') or self::defineConfigFile($event);
 
         $app = self::yii();
-
-        $app->commandRunner->addCommands(\Yii::getPathOfAlias('system.cli.commands'));
-        $app->commandRunner->run(array('yiic', 'migrate'));
+        if($app !== null){
+            $app->commandRunner->addCommands(\Yii::getPathOfAlias('system.cli.commands'));
+            $app->commandRunner->run(array('yiic', 'migrate'));
+        }
 
         echo "\n";
     }
@@ -66,6 +67,8 @@ class Console{
             if (is_file(CONSOLE_CONFIG)) {
                 $app = \Yii::createConsoleApplication(CONSOLE_CONFIG);
             } else {
+                echo "File from CONSOLE CONFIG not found\n";
+                echo "please set rigth 'yiicomposer-console-config'\n";
                 throw new \Exception("File from CONSOLE_CONFIG not found");
             }
         } else {
