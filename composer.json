@@ -27,5 +27,8 @@
     },
     "require": {
         "php": ">=5.3.0"
+    },
+    "scripts":{
+        "post-update-cmd": "YiiComposer\\Console::update",
     }
 }

@@ -11,8 +11,8 @@ use Composer\Installer\LibraryInstaller;
 
 /*
  * задачи:
- * 2 все плюшки вынести в venodor и добавить алиасы
- * 3 запустить миграции
+ * все плюшки вынести в venodor и добавить алиасы +
+ * запустить миграции
  * */
 
 class Installer extends LibraryInstaller
@@ -21,25 +21,32 @@ class Installer extends LibraryInstaller
 
 
     public function __construct(IOInterface $io, Composer $composer, $type = 'library', Filesystem $filesystem = null){
-        $this->yiiPaths = array(
+        $this->yiiPaths = self::getYiiPaths($composer);
+
+        parent::__construct($io, $composer, $type, $filesystem);
+    }
+
+    public static function getYiiPaths(Composer $composer){
+        $yiiPaths = array(
             'module' => '{vendor}'.DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR.'{name}',
             'extension' => '{vendor}'.DIRECTORY_SEPARATOR.'extensions'.DIRECTORY_SEPARATOR.'{name}',
-            'yiisoft/yii' => '{vendor}'.DIRECTORY_SEPARATOR.'framework'
+            'framework' => '{vendor}'.DIRECTORY_SEPARATOR.'framework',
+            'yiisoft/yii' => '$framework$'
         );
 
         if ($composer->getPackage()) {
             $extra = $composer->getPackage()->getExtra();
 
             if(!empty($extra['yiicomposer-paths'])){
-                $this->yiiPaths = array_merge($this->yiiPaths, $extra['yiicomposer-paths']);
+                $yiiPaths = array_merge($yiiPaths, $extra['yiicomposer-paths']);
             }
         }
 
-        parent::__construct($io, $composer, $type, $filesystem);
+        return $yiiPaths;
     }
 
 
-    protected function yiiPackageInfo($type){
+    public static function yiiPackageInfo($type){
         $type = strtolower($type);
 
         if(preg_match('#yii-([^-]*)-(.*)#i', $type, $m)){
@@ -49,24 +56,27 @@ class Installer extends LibraryInstaller
         return false;
     }
 
-    protected function getYiiPackageBasePath(PackageInterface $package){
+    public static function getYiiPackageBasePath($packageType, $paths, $vendorDir, $packageName=""){
 
-        $packageName = $package->getName();
         $type = 'empty';
         $name = '';
         $path = false;
 
-        $info = $this->yiiPackageInfo($package->getType());
+        $info = self::yiiPackageInfo($packageType);
         if(!empty($info)){
             $type = $info['type'];
             $name = $info['name'];
             $path = "{vendor}".DIRECTORY_SEPARATOR."{type}".DIRECTORY_SEPARATOR."{name}";
         }
 
-        if(isset($this->yiiPaths[$packageName])){
-            $path = $this->yiiPaths[$packageName];
-        }elseif($type !== false && isset($this->yiiPaths[$type])){
-            $path = $this->yiiPaths[$type];
+        if(isset($paths[$packageName])){
+            $path = $paths[$packageName];
+        }elseif($type !== false && isset($paths[$type])){
+            $path = $paths[$type];
+        }
+
+        if($path == '$framework$'){
+            $path =  $paths['framework'];
         }
 
         if($path === false)
@@ -76,8 +86,7 @@ class Installer extends LibraryInstaller
         $path = str_replace('\\', DIRECTORY_SEPARATOR, $path);
         $packageName = str_replace('/', DIRECTORY_SEPARATOR, $packageName);
 
-        $this->initializeVendorDir();
-        $info = array("{vendor}" => $this->vendorDir, "{type}" => $type, "{package}" => $packageName, "{name}" => $name);
+        $info = array("{vendor}" => $vendorDir, "{type}" => $type, "{package}" => $packageName, "{name}" => $name);
         $path = strtr($path, $info);
 
         return rtrim($path, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
@@ -89,7 +98,8 @@ class Installer extends LibraryInstaller
      * {@inheritDoc}
      */
     protected function getPackageBasePath(PackageInterface $package){
-        $path = $this->getYiiPackageBasePath($package);
+        $this->initializeVendorDir();
+        $path = $this->getYiiPackageBasePath($package->getType(), $this->yiiPaths, $this->vendorDir, $package->getName());
         if($path === false)
             return parent::getPackageBasePath($package);
 
