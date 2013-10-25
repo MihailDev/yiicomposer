@@ -87,6 +87,19 @@ class Installer extends LibraryInstaller
         return rtrim($path, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
     }
 
+
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getPackageBasePath(PackageInterface $package){
+        $path = $this->getYiiPackageBasePath($package);
+        if($path === false)
+            return parent::getPackageBasePath($package);
+
+        return $path;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -95,16 +108,5 @@ class Installer extends LibraryInstaller
         $targetDir = $package->getTargetDir();
 
         return $this->getPackageBasePath($package) . ($targetDir ? '/'.$targetDir : '');
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function getPackageBasePath(PackageInterface $package){
-        $path = $this->getYiiPackageBasePath($package);
-        if($path === false)
-            return parent::getInstallPath($package);
-
-        return $path;
     }
 }
