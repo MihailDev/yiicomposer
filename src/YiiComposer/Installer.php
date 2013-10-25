@@ -69,7 +69,7 @@ class Installer extends LibraryInstaller
 
         if(isset($this->yiiPaths[$packageName])){
             $path = $this->yiiPaths[$packageName];
-        }elseif(isset($this->yiiPaths[$type]) $$ $type !== false){
+        }elseif($type !== false && isset($this->yiiPaths[$type])){
             $path = $this->yiiPaths[$type];
         }
 
