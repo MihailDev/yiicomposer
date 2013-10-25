@@ -18,11 +18,12 @@ use Composer\Installer\LibraryInstaller;
 class Installer extends LibraryInstaller
 {
     protected $yiiFrameworkName = 'yiisoft/yii';
-    protected $yiiTypes = array();
+    protected $yiiDefaulTypes = array();
+    protected $yiiOptionTypes = array();
 
 
     public function __construct(IOInterface $io, Composer $composer, $type = 'library', Filesystem $filesystem = null){
-        $this->yiiTypes = array(
+        $this->yiiDefaulTypes = array(
             'module' => '{vendor}'.DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR.'{name}',
             'extension' => '{vendor}'.DIRECTORY_SEPARATOR.'extensions'.DIRECTORY_SEPARATOR.'{name}',
             'framework' => '{vendor}'.DIRECTORY_SEPARATOR.'framework'
@@ -37,10 +38,12 @@ class Installer extends LibraryInstaller
             }
 
             if(!empty($extra['yiicomposer-paths'])){
-                foreach($extra['yiicomposer-paths'] as $type => $path){
+                $this->yiiOptionTypes = $extra['yiicomposer-paths'];
+
+                /*foreach($extra['yiicomposer-paths'] as $type => $path){
                     $type = strtolower($type);
                     $this->yiiTypes[$type] = str_replace('/', DIRECTORY_SEPARATOR, $path);
-                }
+                }*/
             }
 
         }
@@ -72,7 +75,9 @@ class Installer extends LibraryInstaller
         $this->initializeVendorDir();
 
         $path = "{vendor}".DIRECTORY_SEPARATOR."{type}".DIRECTORY_SEPARATOR."{name}";
-        if(isset($this->yiiTypes[$type])){
+        if(isset($this->yiiOptionTypes[$type])){
+            $path = str_replace('/', DIRECTORY_SEPARATOR, $this->yiiOptionTypes[$type]);
+        }elseif(isset($this->yiiDefaulTypes[$type])){
             $path = $this->yiiTypes[$type];
         }
         $info = array("{vendor}" => $this->vendorDir, "{type}" => $type, "{name}" => $name);
