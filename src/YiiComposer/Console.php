@@ -12,7 +12,7 @@ use YiiComposer\Installer;
 class Console{
     public static function getYiiPath(Event $event){
         $paths = Installer::getYiiPaths($event->getComposer());
-        return Installer::getYiiPackageBasePath('framework', self::getVendorDir($event->getComposer()), $paths, 'framework').DIRECTORY_SEPARATOR."framework";
+        return Installer::getYiiPackageBasePath('library', $paths, self::getVendorDir($event->getComposer()), 'yiisoft/yii').DIRECTORY_SEPARATOR."framework";
     }
 
     public static function getVendorDir(Composer $composer){
@@ -37,14 +37,9 @@ class Console{
         defined('CONSOLE_CONFIG') or self::defineConfigFile($event);
 
         $app = self::yii();
-        echo "YiiPath: ".YII_PATH."\n";
-        echo "ConfigPath: ".CONSOLE_CONFIG."\n";
 
-
-        if($app !== null){
-            $app->commandRunner->addCommands(\Yii::getPathOfAlias('system.cli.commands'));
-            $app->commandRunner->run(array('yiic', 'migrate'));
-        }
+        $app->commandRunner->addCommands(\Yii::getPathOfAlias('system.cli.commands'));
+        $app->commandRunner->run(array('yiic', 'migrate'));
 
         echo "\n";
     }
@@ -61,6 +56,7 @@ class Console{
     {
         if (!is_file(YII_PATH.'/yii.php'))
         {
+            throw new \Exception("File from YII not found. Path: ".YII_PATH);
             return null;
         }
 
@@ -71,9 +67,7 @@ class Console{
             if (is_file(CONSOLE_CONFIG)) {
                 $app = \Yii::createConsoleApplication(CONSOLE_CONFIG);
             } else {
-                echo "File from CONSOLE CONFIG not found\n";
-                echo "please set rigth 'yiicomposer-console-config'\n";
-                throw new \Exception("File from CONSOLE_CONFIG not found");
+                throw new \Exception("File from CONSOLE CONFIG not found");
             }
         } else {
             $app = \Yii::app();
