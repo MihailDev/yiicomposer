@@ -90,6 +90,16 @@ class Installer extends LibraryInstaller
     /**
      * {@inheritDoc}
      */
+    public function getInstallPath(PackageInterface $package)
+    {
+        $targetDir = $package->getTargetDir();
+
+        return $this->getPackageBasePath($package) . ($targetDir ? '/'.$targetDir : '');
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     protected function getPackageBasePath(PackageInterface $package){
         $path = $this->getYiiPackageBasePath($package);
         if($path === false)
