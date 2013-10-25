@@ -53,7 +53,7 @@ class Console{
                         $command[] = $c['action'];
                     }
 
-                    if(!empty($c['action'])){
+                    if(!empty($c['params'])){
                         $command = array_merge($command,  $c['params']);
                     }
 
