@@ -9,12 +9,6 @@ use Composer\Util\Filesystem;
 use Composer\Installer\LibraryInstaller;
 
 
-/*
- * задачи:
- * все плюшки вынести в venodor и добавить алиасы +
- * запустить миграции
- * */
-
 class Installer extends LibraryInstaller
 {
     protected $yiiPaths = array();
