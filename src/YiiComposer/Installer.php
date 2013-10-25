@@ -33,17 +33,12 @@ class Installer extends LibraryInstaller
             $extra = $composer->getPackage()->getExtra();
 
 
-            if(!empty($extra['yiicomposer-framework'])){
-                $this->yiiFrameworkName = strtolower(trim($extra['yiicomposer-framework']));
-            }
+            /*if(!empty($extra['yiicomposer-framework'])){
+                $this->yiiFrameworkName = $extra['yiicomposer-framework'];
+            }*/
 
             if(!empty($extra['yiicomposer-paths'])){
                 $this->yiiOptionTypes = $extra['yiicomposer-paths'];
-
-                /*foreach($extra['yiicomposer-paths'] as $type => $path){
-                    $type = strtolower($type);
-                    $this->yiiTypes[$type] = str_replace('/', DIRECTORY_SEPARATOR, $path);
-                }*/
             }
 
         }
