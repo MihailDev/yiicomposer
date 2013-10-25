@@ -56,7 +56,7 @@ class Console{
     {
         if (!is_file(YII_PATH.'/yii.php'))
         {
-            throw new \Exception("File from YII not found. Path: ".YII_PATH);
+            throw new \Exception("File from YII not found. Path: ".YII_PATH.'/yii.php');
             return null;
         }
 
@@ -67,7 +67,7 @@ class Console{
             if (is_file(CONSOLE_CONFIG)) {
                 $app = \Yii::createConsoleApplication(CONSOLE_CONFIG);
             } else {
-                throw new \Exception("File from CONSOLE CONFIG not found");
+                throw new \Exception("File from CONSOLE CONFIG not found. Path: ".CONSOLE_CONFIG);
             }
         } else {
             $app = \Yii::app();
