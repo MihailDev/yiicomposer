@@ -73,8 +73,12 @@ class Installer extends LibraryInstaller
             return false;
 
         if(preg_match('#(?<=\$).*(?=\$)#i', $path, $m)){
-            if(isset($paths[$m[0]])){
-                $path = $paths[$m[0]];
+            $d = explode("-", $m[0], 2);
+            if(isset($paths[$d[0]])){
+                $path = $paths[$d[0]];
+                if(isset($d[1])){
+                    $name = $d[1];
+                }
             }else{
                 throw new \Exception("Unknown to identify directory! ".$path);
             }
