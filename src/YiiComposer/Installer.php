@@ -69,12 +69,16 @@ class Installer extends LibraryInstaller
             $path = $paths[$type];
         }
 
-        if($path == '$framework$'){
-            $path =  $paths['framework'];
-        }
-
         if($path === false)
             return false;
+
+        if(preg_match('#(?<=\$).*(?=\$)#i', $path, $m)){
+            if(isset($paths[$m[0]])){
+                $path = $paths[$m[0]];
+            }else{
+                throw new \Exception("Unknown to identify directory! ".$path);
+            }
+        }
 
         $path = str_replace('/', DIRECTORY_SEPARATOR, $path);
         $path = str_replace('\\', DIRECTORY_SEPARATOR, $path);
