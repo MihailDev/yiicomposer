@@ -113,6 +113,9 @@ class Installer extends LibraryInstaller
      */
     public function supports($packageType)
     {
+        if($packageType == 'yii-extension')
+            return true;
+
         if($this->yiiPackageInfo($packageType) !== false){
             return true;
         }
