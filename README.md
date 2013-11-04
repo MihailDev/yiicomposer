@@ -96,4 +96,8 @@ Yii Composer Installer
 
 в данном случае {type} равен extension а {name} равен testextension
 
+Настройка консольных команд
+------------
+
+
 
