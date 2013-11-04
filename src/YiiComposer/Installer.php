@@ -43,23 +43,39 @@ class Installer extends LibraryInstaller
     public static function yiiPackageInfo($type){
         $type = strtolower($type);
 
-        if(preg_match('#yii-([^-]+)-(.+)#i', $type, $m)){
+        $i = explode("-", $type, 3);
+
+        if($i[0] !== 'yii'){
+            return false;
+        }
+
+        if(isset($i[2]))
+            return array('type' => $i[1], 'name' => $i[2]);
+        return array('type' => $i[1], 'name' => "");
+
+        /*
+         if(preg_match('#yii-([^-]+)-(.+)#i', $type, $m)){
             return array('type' => $m[1], 'name' => $m[2]);
         }
 
         return false;
+        */
     }
 
     public static function getYiiPackageBasePath($packageType, $paths, $vendorDir, $packageName=""){
 
         $type = 'empty';
+        $packageNamePaths = explode("/",$packageName);
         $name = '';
+        if(!empty($packageNamePaths[1]))
+            $name = strtolower($packageNamePaths[1]);
         $path = false;
 
         $info = self::yiiPackageInfo($packageType);
         if(!empty($info)){
             $type = $info['type'];
-            $name = $info['name'];
+            if(!empty($info['name']))
+                $name = $info['name'];
             $path = "{vendor}".DIRECTORY_SEPARATOR."{type}".DIRECTORY_SEPARATOR."{name}";
         }
 
@@ -113,9 +129,6 @@ class Installer extends LibraryInstaller
      */
     public function supports($packageType)
     {
-        if($packageType == 'yii-extension')
-            return true;
-
         if($this->yiiPackageInfo($packageType) !== false){
             return true;
         }
