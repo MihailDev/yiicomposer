@@ -52,14 +52,6 @@ class Installer extends LibraryInstaller
         if(isset($i[2]))
             return array('type' => $i[1], 'name' => $i[2]);
         return array('type' => $i[1], 'name' => "");
-
-        /*
-         if(preg_match('#yii-([^-]+)-(.+)#i', $type, $m)){
-            return array('type' => $m[1], 'name' => $m[2]);
-        }
-
-        return false;
-        */
     }
 
     public static function getYiiPackageBasePath($packageType, $paths, $vendorDir, $packageName=""){
