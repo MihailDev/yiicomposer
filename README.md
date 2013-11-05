@@ -99,5 +99,114 @@ Yii Composer Installer
 Настройка консольных команд
 ------------
 
+В раздел scripts вносим следующую запись
+"post-update-cmd": "YiiComposer\\Console::update"
+
+Пример
+```json
+{
+    "minimum-stability" : "alpha",
+    "config":{
+        "vendor-dir": "www/protected/vendor"
+    },
+	"extra":{
+			"yiicomposer-paths":{
+				"clevertech/yii-booster": "$extension-yii-booster$",
+				"yiiext/migrate-command": "$extension$"
+			}
+	},
+     "require": {
+        "mihaildev/yiicomposer": "dev-master",
+		"mihaildev/testmodule": "dev-master",
+		"mihaildev/testextension": "dev-master",
+		"yiisoft/yii": "dev-master",
+		"clevertech/yii-booster": "v2.0.0",
+		"yiiext/migrate-command": "dev-master"
+    },
+	"scripts":{
+        "post-update-cmd": "YiiComposer\\Console::update"
+    }
+}
+```
+
+По умолчанию для запуска консольного приложения используется файл с настройками, находящийся по адресу path/to/vendor/../config/console.php,
+так как я предполагаю, что пользователи будут хранить папку vendor в папке protected, но при необходимости можно установить пременную "yiicomposer-console-config" указав путь к файлу с настройками.
+
+Пример:
+```json
+{
+    "minimum-stability" : "alpha",
+    "config":{
+        "vendor-dir": "www/protected/vendor"
+    },
+	"extra":{
+			"yiicomposer-console-config":"www/protected/config/console.php",
+
+			"yiicomposer-paths":{
+				"clevertech/yii-booster": "$extension-yii-booster$",
+				"yiiext/migrate-command": "$extension$"
+			}
+	},
+     "require": {
+        "mihaildev/yiicomposer": "dev-master",
+		"mihaildev/testmodule": "dev-master",
+		"mihaildev/testextension": "dev-master",
+		"yiisoft/yii": "dev-master",
+		"clevertech/yii-booster": "v2.0.0",
+		"yiiext/migrate-command": "dev-master"
+    },
+	"scripts":{
+        "post-update-cmd": "YiiComposer\\Console::update"
+    }
+}
+
+По умолчанию выполняется только одна консольная команда yiic migrate
+При необходимости можно добавить или переопределить список запускаемых команд настроив переменную "yiicomposer-console-commands"
+
+Пример:
+```json
+{
+    "minimum-stability" : "alpha",
+    "config":{
+        "vendor-dir": "www/protected/vendor"
+    },
+	"extra":{
+			"yiicomposer-console-config":"www/protected/config/console.php",
+
+			"yiicomposer-console-commands":[
+            {
+                "controller":"migrate"
+            },
+            {
+                "controller":"test",
+                "action": "test",
+                "params": {
+                    "param1": "value1",
+                    "param2": "value2",
+                    "param3": "value3"
+                }
+            }
+        ],
+
+			"yiicomposer-paths":{
+				"clevertech/yii-booster": "$extension-yii-booster$",
+				"yiiext/migrate-command": "$extension$"
+			}
+	},
+     "require": {
+        "mihaildev/yiicomposer": "dev-master",
+		"mihaildev/testmodule": "dev-master",
+		"mihaildev/testextension": "dev-master",
+		"yiisoft/yii": "dev-master",
+		"clevertech/yii-booster": "v2.0.0",
+		"yiiext/migrate-command": "dev-master"
+    },
+	"scripts":{
+        "post-update-cmd": "YiiComposer\\Console::update"
+    }
+}
+```
+
+
 
 
