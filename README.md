@@ -159,7 +159,7 @@ Yii Composer Installer
         "post-update-cmd": "YiiComposer\\Console::update"
     }
 }
-
+```
 По умолчанию выполняется только одна консольная команда yiic migrate
 При необходимости можно добавить или переопределить список запускаемых команд настроив переменную "yiicomposer-console-commands"
 
